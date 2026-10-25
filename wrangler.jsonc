@@ -1,0 +1,19 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "reach-your-customer",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-10-25",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./web",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
+  },
+  "vars": { "INITIAL_USER_EMAIL": "tommi.khrisna@fluxoryid.com", "INITIAL_USER_NAME": "Tommi Khrisna" },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "ryc-db",
+    "database_id": "00000000-0000-0000-0000-000000000000",
+    "migrations_dir": "migrations"
+  }]
+}
