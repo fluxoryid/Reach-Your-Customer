@@ -58,3 +58,7 @@ Password Worker memakai Web Crypto PBKDF2-SHA256 dengan 100.000 iterasi (batas r
 ## Rollback
 
 Simpan ID versi dari deployment sukses. Jika login atau `/api/health` gagal setelah perubahan kode, gunakan `npx wrangler rollback <VERSION_ID>` untuk versi sehat sebelumnya, lalu cek kembali login dan pencarian. Jangan menghapus D1 saat rollback kode. Migrasi awal bersifat aditif; rollback Worker tidak mengembalikan isi database. Backup/export D1 sebelum migrasi lanjutan yang mengubah data. Deployment remote dan rollback belum dijalankan dalam sesi ini karena akses akun belum tersedia.
+
+## Alternatif sepenuhnya melalui dashboard
+
+Lihat [CLOUDFLARE-DASHBOARD.md](CLOUDFLARE-DASHBOARD.md). Worker sekarang juga menerima **Worker Secret** `INITIAL_PASSWORD` untuk bootstrap tanpa helper Python/terminal. Hash disimpan dalam D1; secret tidak boleh diletakkan dalam variabel publik atau GitHub. `INITIAL_PASSWORD_HASH` tetap didukung dan diutamakan jika valid. Hapus secret bootstrap setelah akun terbentuk dan password pertama diganti.

@@ -43,3 +43,5 @@ Uji browser opsional: `python3 tests/browser_smoke.py` memerlukan Playwright dan
 ## Cloudflare Workers
 
 Untuk deployment Cloudflare gunakan Worker JavaScript + D1, bukan `server.py`. Lihat [CLOUDFLARE.md](CLOUDFLARE.md) untuk akun awal Tommi, setup secret password, pengecekan paket, migrasi database, dan deployment. `npm test` menguji Worker pada runtime workerd dengan database D1 sementara.
+
+**Tanpa terminal/laptop:** ikuti [panduan Cloudflare Dashboard](CLOUDFLARE-DASHBOARD.md) untuk menghubungkan GitHub, membuat D1, dan mengatur password melalui Worker Secret.

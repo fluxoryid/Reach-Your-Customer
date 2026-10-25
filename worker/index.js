@@ -64,8 +64,14 @@ async function api(request,env){
    return result.meta.changes?json({message:'Registrasi berhasil. Silakan masuk.'},201):json({error:'Email sudah terdaftar. Silakan masuk.'},409);
   }
   if(!u&&email===initialEmail){
-   if(!validHash(env.INITIAL_PASSWORD_HASH))return json({error:'Akun awal belum diaktifkan. Pengelola perlu mengatur secret INITIAL_PASSWORD_HASH.'},503);
-   await env.DB.prepare('INSERT OR IGNORE INTO users(email,name,password) VALUES(?,?,?)').bind(email,env.INITIAL_USER_NAME||'Tommi Khrisna',env.INITIAL_PASSWORD_HASH).run();
+   // Dashboard-only setup: the initial password is a Worker Secret, never a public var.
+   // Persist only its salted hash in D1; existing accounts are never overwritten.
+   let initialHash=env.INITIAL_PASSWORD_HASH;
+   if(!validHash(initialHash)) {
+    if(!validPassword(env.INITIAL_PASSWORD))return json({error:'Akun awal belum diaktifkan. Atur secret INITIAL_PASSWORD di Cloudflare dengan minimal 12 karakter: kapital, kecil, angka, dan simbol.'},503);
+    initialHash=await hashPassword(env.INITIAL_PASSWORD);
+   }
+   await env.DB.prepare('INSERT OR IGNORE INTO users(email,name,password) VALUES(?,?,?)').bind(email,env.INITIAL_USER_NAME||'Tommi Khrisna',initialHash).run();
    u=await env.DB.prepare('SELECT * FROM users WHERE email=?').bind(email).first();
   }
   if(!u)return json({error:'Email belum terdaftar. Silakan registrasi.',register:true},404);
